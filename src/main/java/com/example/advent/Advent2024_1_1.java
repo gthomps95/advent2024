@@ -13,7 +13,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 public class Advent2024_1_1 implements CommandLineRunner{
 
     @Override
@@ -22,7 +22,7 @@ public class Advent2024_1_1 implements CommandLineRunner{
 
         val is = new FileInputStream("/Users/gregorythompson/Projects/advent/2024_1_1.txt");
 
-		val lines = IOUtils.readLines(is, Charset.defaultCharset());
+        val lines = IOUtils.readLines(is, Charset.defaultCharset());
 
         val lineInts = lines.stream().map(l -> convertToInts(l)).toList();
         val list1 = lineInts.stream().mapToInt(li -> li.a).sorted().toArray();
