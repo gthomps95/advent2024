@@ -5,11 +5,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -31,7 +27,7 @@ public class Advent2024_3_1 implements CommandLineRunner{
 
         val matches = lines.stream().flatMap(l -> extractInstructions(l).stream()).toList();
 
-        log.info("matches {}", matches); 
+        // log.info("matches {}", matches); 
 
         val total = matches.stream().mapToLong(m -> performMul(m)).sum();
 
