@@ -17,7 +17,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 public class Advent2024_5_1 implements CommandLineRunner{
 
     @Override
