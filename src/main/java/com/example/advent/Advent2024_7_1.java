@@ -31,14 +31,22 @@ public class Advent2024_7_1 implements CommandLineRunner{
         val equations = createEquations(lines);
         // log.info("Equations: {}", equations);
 
-        Map<Boolean, List<Equation>> p = equations.stream().collect(Collectors.partitioningBy(e -> e.canBeCalculated(operators_1)));
+        Map<Boolean, List<Equation>> p = equations.stream().collect(Collectors.partitioningBy(e -> e.canBeCalculated(operators_1).pass));
 
         val sum = p.get(Boolean.TRUE).stream().mapToLong(Equation::testValue).sum();
-        val sum2 = p.get(Boolean.FALSE).stream().filter(e -> e.canBeCalculated(operators_2)).mapToLong(e -> e.testValue).sum();
+        val sum2 = p.get(Boolean.FALSE).stream().filter(e -> e.canBeCalculated(operators_2).pass).mapToLong(e -> e.testValue).sum();
+
+        // val p2 = p.get(Boolean.FALSE).stream().map(e -> e.canBeCalculated(operators_2)).collect(Collectors.partitioningBy(r -> r.pass));
+
+        // log.info("{} p2 size", p2.get(Boolean.FALSE).size());
+
+        // equations.stream().map(e -> e.canBeCalculated(operators_2)).forEach(r -> log.info("ln {} pass {} trys {}", r.equation.lineNumber, r.pass, r.ops));
+
+        // val r = equations.get(0).canBeCalculated(operators_2);
+        // log.info("{} r", r);
 
         log.info("day 7 part 1 {}", sum); 
         log.info("day 7 part 2 {}", sum + sum2); 
-        // log.info("day 6 part 2 {}", options.size()); 
     } 
 
     private static void printArray(int[][] array) {
@@ -65,11 +73,14 @@ public class Advent2024_7_1 implements CommandLineRunner{
     }
 
     private static final List<BiFunction<Long, Long, Long>> operators_1 = List.of((a, b) -> a + b, (a, b) -> a * b);
-    private static final List<BiFunction<Long, Long, Long>> operators_2 = List.of((a, b) -> a + b, (a, b) -> a * b, (a, b) -> Long.parseLong((a + "") + (b + "")));
+    private static final List<BiFunction<Long, Long, Long>> operators_2 = List.of((a, b) -> a + b, (a, b) -> a * b, (a, b) -> Long.parseLong(a + "" + b));
 
-    private record Equation(List<Long> operands, long testValue) {
-        private boolean canBeCalculated(List<BiFunction<Long, Long, Long>> operators) {
+    private record Result(Equation equation, boolean pass, int[] ops) {}
+
+    private record Equation(int lineNumber, List<Long> operands, long testValue) {
+        private Result canBeCalculated(List<BiFunction<Long, Long, Long>> operators) {
             val trys = buildTable(operands.size(), operators.size());            
+            // log.info("{} try count", trys.length);
 
             for (int t = 0; t < trys.length; t++) {
                 long value = operands.get(0);
@@ -83,21 +94,21 @@ public class Advent2024_7_1 implements CommandLineRunner{
                 // log.info("t {} tv {}", t, value);
 
                 if (value == testValue) {
-                    return true;
+                    return new Result(this, true, trys[t]);
                 }
             }
 
-            return false;
+            return new Result(this, false, null);
         }
     }
 
     private List<Equation> createEquations(List<String> lines) {
-        return lines.stream().map(this::createEquation).toList();
+        return IntStream.range(0, lines.size()).mapToObj(i -> createEquation(i + 1, lines.get(i))).toList();
     }
 
-    private Equation createEquation(String line) {
+    private Equation createEquation(int lineNumber, String line) {
         val testValue = Long.parseLong(line.split(":")[0]);
         val operands = Arrays.stream(line.split(":")[1].split(" ")).filter(s -> !s.isEmpty()).map(s -> Long.parseLong(s)).toList();
-        return new Equation(operands, testValue);
+        return new Equation(lineNumber, operands, testValue);
     }
 }
