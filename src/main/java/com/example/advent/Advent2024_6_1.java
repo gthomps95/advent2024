@@ -17,7 +17,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 public class Advent2024_6_1 implements CommandLineRunner{
 
     private static char[] VALID_SQUARES = new char[] {'.', 'W', 'X', 'Y', 'Z'};
