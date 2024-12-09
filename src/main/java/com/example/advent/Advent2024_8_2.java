@@ -23,7 +23,7 @@ public class Advent2024_8_2 implements CommandLineRunner{
     public void run(String... args) throws Exception {
         log.info("2024 8 2");
 
-        val is = new FileInputStream("/Users/gregorythompson/Projects/advent/2024_8_1.txt");
+        val is = new FileInputStream("/Users/gregorythompson/Projects/advent/2024_8_1_jt.txt");
 
         val lines = IOUtils.readLines(is, Charset.defaultCharset());
 
