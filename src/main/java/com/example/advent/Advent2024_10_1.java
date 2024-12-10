@@ -40,15 +40,24 @@ public class Advent2024_10_1 implements CommandLineRunner {
         val trailheads = findStarts(map);
         log.info("trailheads count {}", trailheads.size());
 
-        val count = trailheads.stream().mapToInt(s -> {
+        val scores = trailheads.stream().mapToInt(s -> {
             val newMap = copyMap(map);
-            val result = findTrailheads(newMap, s);
+            val result = findTrailheads(newMap, s, true);
             log.info("score is {} for trailhead {}", result, s);
             return result;
         }).sum();
         printArray(map);
 
-        log.info("day 10 part 1 {}", count); 
+        val newMap = copyMap(map);
+        val ratings = trailheads.stream().mapToInt(s -> {
+            val result = findTrailheads(newMap, s, false);
+            log.info("score is {} for trailhead {}", result, s);
+            return result;
+        }).sum();
+        printArray(map);
+
+        log.info("day 10 part 1 {}", scores); 
+        log.info("day 10 part 2 {}", ratings); 
     } 
 
     private record Point(char elevation, int x, int y) {
@@ -57,10 +66,10 @@ public class Advent2024_10_1 implements CommandLineRunner {
         }
     }
 
-    private int findTrailheads(char[][] map, Point current) {
+    private int findTrailheads(char[][] map, Point current, boolean markEndings) {
         if (current.elevation == '9') {
             log.info("found trailhead at {}", current);
-            map[current.y][current.x] = 'T';
+            if (markEndings) map[current.y][current.x] = 'T';
             return 1;
         }
 
@@ -74,7 +83,7 @@ public class Advent2024_10_1 implements CommandLineRunner {
 
         log.info("found {} next steps {}", nextSteps.size(), nextSteps);
 
-        return nextSteps.stream().mapToInt(s -> findTrailheads(map, s)).sum();
+        return nextSteps.stream().mapToInt(s -> findTrailheads(map, s, markEndings)).sum();
     }
 
     private List<Point> findNextSteps(char[][] map, Point s) {
