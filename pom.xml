@@ -85,7 +85,7 @@
 				<configuration>
 					<jvmArguments>
 						-Xms256m
-						-Xmx8g
+						-Xmx16g
 					</jvmArguments>
 				</configuration>
 			</plugin>
