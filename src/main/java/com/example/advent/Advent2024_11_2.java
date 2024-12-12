@@ -15,7 +15,7 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 public class Advent2024_11_2 implements CommandLineRunner {
     private BigInteger[][] precalc;
 
@@ -30,7 +30,7 @@ public class Advent2024_11_2 implements CommandLineRunner {
         var stones = addStones(lines.get(0));
         // log.info("Initial stones {}", stones);
 
-        val ilen = 10000;
+        val ilen = 1000;
         val blen = 30;
 
         val precalc = new BigInteger[ilen][blen];
