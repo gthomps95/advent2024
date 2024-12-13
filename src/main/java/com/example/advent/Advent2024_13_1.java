@@ -74,6 +74,7 @@ public class Advent2024_13_1 implements CommandLineRunner {
         val x = Integer.parseInt(location.substring(location.indexOf("X=") + 2, location.indexOf(",")));
         val y = Integer.parseInt(location.substring(location.indexOf("Y=") + 2));
 
-        return new Machine(n, ax, ay, bx, by, x + 10000000000000L, y + 10000000000000L);
+        // return new Machine(n, ax, ay, bx, by, x + 10000000000000L, y + 10000000000000L);
+        return new Machine(n, ax, ay, bx, by, x, y);
     }
 }
