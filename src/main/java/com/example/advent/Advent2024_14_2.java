@@ -21,8 +21,8 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-// @Component
-public class Advent2024_14_1 implements CommandLineRunner {
+@Component
+public class Advent2024_14_2 implements CommandLineRunner {
 
     private static int xlen = 101;
     private static int ylen = 103;    
@@ -41,7 +41,7 @@ public class Advent2024_14_1 implements CommandLineRunner {
 
     @SneakyThrows
     public void execute() {
-        log.info("2024 14 1");
+        log.info("2024 14 2");
 
         val is = new FileInputStream("/Users/gregorythompson/Projects/advent/2024_14_1.txt");
 
@@ -50,20 +50,36 @@ public class Advent2024_14_1 implements CommandLineRunner {
         // log.info("robots {}", robots);
         // log.info("quadrants {}", QUADRANTS);
 
-        robots.forEach(r -> log.info("robot {} {}", r, QUADRANTS.stream().filter(q -> r.isInQuadrant(q)).findFirst().map(q -> q.n).orElse(null)));
+        // robots.forEach(r -> log.info("robot {} {}", r, QUADRANTS.stream().filter(q -> r.isInQuadrant(q)).findFirst().map(q -> q.n).orElse(null)));
 
         // val map = new int[103][101];
         // printArray(map);
 
-        for (int m = 0; m < 100; m++) {
+        int m = 0;
+        boolean found = false;
+        while (!found) {
             robots.stream().forEach(r -> r.move());
-        }
 
-        robots.forEach(r -> log.info("robot {} {}", r, QUADRANTS.stream().filter(q -> r.isInQuadrant(q)).findFirst().map(q -> q.n).orElse(null)));
+            val q1 = robots.stream().filter(r -> r.isInQuadrant(QUADRANTS.get(0))).count();
+            val q2 = robots.stream().filter(r -> r.isInQuadrant(QUADRANTS.get(1))).count();
+            val q3 = robots.stream().filter(r -> r.isInQuadrant(QUADRANTS.get(2))).count();
+            val q4 = robots.stream().filter(r -> r.isInQuadrant(QUADRANTS.get(3))).count();
+
+            found = Math.abs(q1 - q2) < 10 && Math.abs(q3 - q4) < 10 && q3 / (double) q1 > 2.3;
+            // found = q1 == q2 && q3 == q4 && q3 / (double) q1 > 2;
+            log.info("m {}", m++);
+
+            if (found) {
+                val map = new int[103][101];
+                robots.stream().forEach(r -> map[r.p.y][r.p.x]++);
+                printArray(map);
+                System.out.println(m);    
+            }
+        }
+        
+        // robots.forEach(r -> log.info("robot {} {}", r, QUADRANTS.stream().filter(q -> r.isInQuadrant(q)).findFirst().map(q -> q.n).orElse(null)));
 
         val safety = QUADRANTS.stream().mapToLong(q -> robots.stream().filter(r -> r.isInQuadrant(q)).count()).reduce(1, (i, c) -> i * c);
-
-        
 
         log.info("day 14 part 1 {}", safety); 
         // log.info("day 12 part 2 {}", cost2); 
@@ -126,7 +142,11 @@ public class Advent2024_14_1 implements CommandLineRunner {
     private static void printArray(int[][] array) {
         for (int y = 0; y < array.length; y++) {
             for (int x = 0; x < array[y].length; x++) {
-                System.out.print(array[y][x]);
+                if (array[y][x] == 0) {
+                    System.out.print(".");
+                } else {
+                    System.out.print(array[y][x]);
+                }
             }
             System.out.print("\n");
         }
