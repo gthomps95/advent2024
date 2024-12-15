@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+// @Component
 public class Advent2024_14_2 implements CommandLineRunner {
 
     private static int xlen = 101;
